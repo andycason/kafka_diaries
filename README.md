@@ -1,4 +1,4 @@
-# Twitter Bot @Franz_Kafka_Diaries
+# Twitter Bot @Franz_K_Diaries
 Twitterbot tweets Franz Kafka's diary entry for the day
 
 This twitter bot pulls from a text file of diary entries of Franz Kafka and posts them to twitter.
