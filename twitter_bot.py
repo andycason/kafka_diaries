@@ -18,7 +18,7 @@ d = date.today()
 
 d_format = d.strftime("%d %B.")
 
-#d_format = "30 December."
+#d_format = "12 March."
 
 if d_format[0] == "0":
 	d_format = d_format[1:]
@@ -39,17 +39,35 @@ print("Found the date in the following location: "+str(k_today_loc))
 #find last sentence
 next = []
 
-nextmonth = datetime.date.today() + relativedelta.relativedelta(months=1)
+nextmonth = datetime.date.today() + relativedelta.relativedelta(month=1)
 
-for i in k_sents[k_today_loc+1:k_today_loc+100]:
-	if d.strftime("%B.") in i:
-		next.append(k_sents.index(i))
-	if nextmonth.strftime("%B.") in i:
-		next.append(k_sents.index(i))
+next20days  = []
 
-end = next[0]
+for i in range(20):
+	next_day = datetime.date.today() + relativedelta.relativedelta(days=i)
+	next_day_format = next_day.strftime("%d %B.")
+	if next_day_format[0] == "0":
+		next_day_format = next_day_format[1:]
+	next20days.append(next_day_format)
+
+
+next20days = next20days[1:]
+
+start = int(k_today_loc+1)
+startplus100 = int(k_today_loc+100)
+search_range = k_sents[start:startplus100]
+
+for i in next20days:
+	try:
+		next.append(search_range.index(i))
+	except:
+		pass
+
+end = k_today_loc + next[0]
+
 
 print("Found the end of the entry in the following location: "+str(end))
+
 
 #make the tweet
 
@@ -91,7 +109,7 @@ for tweet in status_current:
 
 tweet_sub = []
 tweet_sub_str = ''
-
+tweet_number = 1
 
 for i in tweet_word:
 	char_count += len(i)
@@ -106,6 +124,8 @@ for i in tweet_word:
 		tweet_sub_str = tweet_sub_str.replace(" !", "!")
 		tweet_sub_str = tweet_sub_str.replace(" ?", "?")
 		api.update_status(status=tweet_sub_str,in_reply_to_status_id=status_current_id)
+		tweet_number += 1
+		print("Tweeted tweet number " + str(tweet_number))
 		tweet_sub = []
 		tweet_sub_str = ''
 		char_count = 0
@@ -125,29 +145,12 @@ tweet_sub_str = tweet_sub_str.replace(" !", "!")
 tweet_sub_str = tweet_sub_str.replace(" ?", "?")
 
 api.update_status(status=tweet_sub_str,in_reply_to_status_id=status_current_id)
+print ("Tweeted last tweet!")
 
 
 
 
+tweet_v2 = ' '.join(tweet_list)
+print(tweet_v2)
 
-tweet = ' '.join(tweet_list)
-print(tweet)
-
-#tweet_short = []
-#if len(tweet) > 270:
-#	for i in tweet_list:
-#		tweet_short.append(tweet_list[tweet_list.index(i)])
-#		tweet = ' '.join(tweet_short)
-#		if len(tweet) < 280:
-			#api.update_status(tweet)
-#			print(tweet)
-#		print("length error")
-#		tweet_short = []
-		#current_status = api.get_user()
-		
-	
-
-#public_tweets = api.home_timeline()
-#for tweet in public_tweets:
-#	print tweet.text
 
